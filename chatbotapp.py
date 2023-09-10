@@ -66,7 +66,7 @@ if prompt := st.chat_input():
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
-    response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
+    response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages,temprature=0.1)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
     st.chat_message("assistant").write(msg.content)
