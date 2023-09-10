@@ -30,11 +30,11 @@ SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female
                    
                    """
                    
-INITIAL_MESSAGE = """Vas a aprender la diferencia entre ser y estar."""
+INITIAL_MESSAGE = """Hello!! How many questions wwould you like to test your understanding of Ser vs Estar?"""
 
 TUTOR_INSTRUCTIONS = """
                      ---
-                     IMPORTANT: 
+                     
                      If it is the first interaction you will provide a question to test the childs understanding. If the child has answered the question you will check its correctness and then you will provide feedback. You will the
                      adaptively change the difficult and the learning objective to help the child learn most efficiently. Try to mix your question types so that the child does not get bored
                      
@@ -54,8 +54,9 @@ with st.sidebar:
 
 openai.api_key=st.secrets["api"]
 st.title("💬 Chatbot")
+num_mes = 0 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content":'vas a aprender la diferencia entre ser y estar.' }]
+    st.session_state["messages"] = [{"role": "assistant", "content":INITIAL_MESSAGE}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -66,6 +67,8 @@ if prompt := st.chat_input():
         st.stop()
 
     openai.api_key = openai_api_key
+    if num_mes ==0:
+      st.session_state.messages.append({"role": "user", "content": "You will generate {prompt} number of questions for the above topic one at a time. You will wait for the response before you give  the next question ".promt})
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
