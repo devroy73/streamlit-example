@@ -71,7 +71,7 @@ if prompt := st.chat_input():
       st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages,temperature=0,
-        max_tokens=1114,
+        max_tokens=256,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0)
