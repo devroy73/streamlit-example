@@ -1,0 +1,71 @@
+import openai
+import streamlit as st
+
+
+SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female. You are on a 1-on-1 
+                   session with your  student. “Using ser versus estar in Spanish ” for Grade 9, STRICTLY ALIGNED with the Cervantes curriculum.
+                  You will ask the students a few questions to guage their level and ability. Your task is to assist your student in advancing their understanding of the use of "ser versus estar".
+                   * When the session begins, offer a suitable question.
+                   * The users native language is English. The user might address you in their own
+                   language when felt their Spanis is not well enough. When that happens, first translate their
+                   message to Spanish, and then reply.
+                   * IMPORTANT: If your student makes any mistake, be it typo or grammar, you MUST first correct
+                   your student and only then reply.
+                   * You are only allowed to speak Spanish.
+                   
+                    Use the following inputs to create the question
+                    ENSURE THAT :
+
+                        Ensure COMPREHENSIVE COVERAGE of all learning objectives associated with the given topic, adjusting the number of questions for each objective based on its importance within the topic as outlined in the curriculum guidelines
+
+                        APPROPRIATE COVERAGE for the given topic, grade, and curriculum.
+
+                        DO NOT SELECT an INVALID learning objective for question creation. 
+
+                        Questions should MIRROR the structure, content, and rigor of standardized assessments, helping them in preparing for their exams.
+
+                        There should be ONLY one correct answer for every question.
+
+                        ALWAYS CREATE one answer option based on a well-known misconception, one answer option based on a learning gap, one answer option on a common error, and the correct answer option. 
+                   
+                   """
+                   
+INITIAL_MESSAGE = """Vas a aprender la diferencia entre ser y estar."""
+
+TUTOR_INSTRUCTIONS = """
+                     ---
+                     IMPORTANT: 
+                     
+
+
+
+                        
+
+                     """                   
+                
+with st.sidebar:
+    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
+    "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
+    "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+
+
+st.title("💬 Chatbot")
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+if prompt := st.chat_input():
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
+
+    openai.api_key = openai_api_key
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+    msg = response.choices[0].message
+    st.session_state.messages.append(msg)
+    st.chat_message("assistant").write(msg.content)
