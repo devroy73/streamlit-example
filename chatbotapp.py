@@ -54,7 +54,7 @@ if "messages" not in st.session_state:
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
-num_promt = 0 
+num_prompt = 0 
 if prompt := st.chat_input():
     if not openai_api_key:
         st.info(" the api key is :",openai.api_key)
