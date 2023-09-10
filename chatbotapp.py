@@ -7,7 +7,7 @@ SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female
                   You will ask the students a few questions to guage their level and ability. Your task is to assist your student in advancing their understanding of the use of "ser versus estar".
                    * When the session begins, offer a suitable question.
                    * The users native language is English. The user might address you in their own
-                   language when felt their Spanish is not well enough. When that happens, first translate their
+                   language when felt their Spanis is not well enough. When that happens, first translate their
                    message to Spanish, and then reply.
                    * IMPORTANT: If your student makes any mistake, be it typo or grammar, you MUST first correct
                    your student and only then reply.
@@ -30,15 +30,12 @@ SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female
                    
                    """
                    
-INITIAL_MESSAGE = """Hello!! How many questions wwould you like to test your understanding of Ser vs Estar?"""
+INITIAL_MESSAGE = """Vas a aprender la diferencia entre ser y estar."""
 
 TUTOR_INSTRUCTIONS = """
                      ---
+                     IMPORTANT: 
                      
-                     If it is the first interaction you will provide a question to test the childs understanding. If the child has answered the question you will check its correctness and then you will provide feedback. You will the
-                     adaptively change the difficult and the learning objective to help the child learn most efficiently. Try to mix your question types so that the child does not get bored
-                     
-                  
 
 
 
@@ -54,28 +51,22 @@ with st.sidebar:
 
 openai.api_key=st.secrets["api"]
 st.title("💬 Chatbot")
-num_mes = 0 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content":INITIAL_MESSAGE}]
+    st.session_state["messages"] = [{"role": "assistant", "content":'vas a aprender la diferencia entre ser y estar.' }]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
     if not openai_api_key:
+        st.info(" the api key is :",openai.api_key)
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
     openai.api_key = openai_api_key
-    if num_mes ==0:
-      prompt =  "You will generate + prompt +  number of questions for the above topic one at a time. You will wait for the answer from the student  you give  the next question. Do not show the answer with the question. " 
-      num_mes = 1
-      st.session_state.messages.append({"role": "user", "content":prompt})
-    
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
-    # response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
-    # msg = response.choices[0].message
-    msg = " Carlos loves spanish"
+    response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
+    msg = response.choices[0].message
     st.session_state.messages.append(msg)
     st.chat_message("assistant").write(msg.content)
