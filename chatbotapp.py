@@ -68,8 +68,10 @@ if prompt := st.chat_input():
 
     openai.api_key = openai_api_key
     if num_mes ==0:
-      prompt =  "You will generate {prompt} number of questions for the above topic one at a time. You will wait for the response before you give  the next question " + prompt
+      prompt =  "You will generate + prompt +  number of questions for the above topic one at a time. You will wait for the answer from the student  you give  the next question. Do not show the answer with the question. " 
+      num_mes = 1
       st.session_state.messages.append({"role": "user", "content":prompt})
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
