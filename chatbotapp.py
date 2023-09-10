@@ -30,7 +30,7 @@ SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female
                    
                    """
                    
-INITIAL_MESSAGE = """How many questions do you want to answer"""
+INITIAL_MESSAGE = """How many questions do you want to practice?(default:10)"""
 
 
                      
@@ -39,7 +39,7 @@ INITIAL_MESSAGE = """How many questions do you want to answer"""
 
                         
 
-                     """                   
+                                 
                 
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
@@ -50,7 +50,7 @@ with st.sidebar:
 openai.api_key=st.secrets["api"]
 st.title("💬 Chatbot")
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content":'How many questions do you want to practice :' }]
+    st.session_state["messages"] = [{"role": "assistant", "content":INITIAL_MESSAGE }]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
