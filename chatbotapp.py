@@ -63,8 +63,7 @@ if prompt := st.chat_input():
 
     openai.api_key = openai_api_key
     if num_prompt ==0:
-       initial_prompt = """ You will generate {prompt} number of questions if it is a number otherwise generate 10 questions. You will generate ONE QUESTION AT A TIME question and let the student answer it. You will then look at the answer and correct it using emojis where appropriate. 
-       Be empathetic to the student and encourage them.  """
+       initial_prompt = """ You will generate {prompt} number of questions if it is a number otherwise generate 10 questions. You will generate ONE QUESTION AT A TIME question and let the student answer it. You will then look at the answer and correct it using emojis where appropriate. Be empathetic to the student and encourage them.  """
        st.session_state.messages.append({"role": "user", "content": initial_prompt})
        num_prompt = 1 
     else:
