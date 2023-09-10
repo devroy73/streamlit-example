@@ -52,7 +52,7 @@ with st.sidebar:
 openai.api_key=st.secrets["api"]
 st.title("💬 Chatbot")
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content":'vas a aprender la diferencia entre ser y estar.' }]
+    st.session_state["messages"] = [{"role": "assistant", "content":'How many questions do you want to practice :' }]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -66,7 +66,11 @@ if prompt := st.chat_input():
     openai.api_key = openai_api_key
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
-    response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages)
+    response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages,temperature=0,
+        max_tokens=1114,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0)
     msg = response.choices[0].message
     st.session_state.messages.append(msg)
     st.chat_message("assistant").write(msg.content)
