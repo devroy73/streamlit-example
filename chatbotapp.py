@@ -48,8 +48,8 @@ with st.sidebar:
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
     "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
     "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
-
-openai.api_key=st.secrets["api"]
+  
+openai.api_key="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"
 st.title("💬 Chatbot")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content":'vas a aprender la diferencia entre ser y estar.' }]
