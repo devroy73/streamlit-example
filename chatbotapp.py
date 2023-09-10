@@ -30,11 +30,9 @@ SYSTEM_PROMPT = """You are a Spanish teacher named Claudia, and you are a female
                    
                    """
                    
-INITIAL_MESSAGE = """Vas a aprender la diferencia entre ser y estar."""
+INITIAL_MESSAGE = """How many questions do you want to answer"""
 
-TUTOR_INSTRUCTIONS = """
-                     ---
-                     IMPORTANT: 
+
                      
 
 
@@ -56,7 +54,7 @@ if "messages" not in st.session_state:
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
-
+num_promt = 0 
 if prompt := st.chat_input():
     if not openai_api_key:
         st.info(" the api key is :",openai.api_key)
@@ -64,7 +62,12 @@ if prompt := st.chat_input():
         st.stop()
 
     openai.api_key = openai_api_key
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    if num_prompt ==0:
+       initial_prompt = """ You will generate {prompt} number of questions if it is a number otherwise generate 10 questions. You will generate ONE QUESTION AT A TIME question and let the student answer it. You will then look at the answer and correct it using emojis where appropriate. 
+       Be empathetic to the student and encourage them.  """
+       st.session_state.messages.append({"role": "user", "content": initial_prompt})
+    else:
+      st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     response = openai.ChatCompletion.create(model="gpt-4", messages=st.session_state.messages,temperature=0,
         max_tokens=1114,
